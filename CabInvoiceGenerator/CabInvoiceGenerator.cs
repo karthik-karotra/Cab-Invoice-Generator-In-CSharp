@@ -41,5 +41,9 @@ namespace CabInvoiceGenerator
 
             return new InvoiceSummary(rides.Length, totalRidesFare);
         }
+
+        public void MapRidesToUser(string userID, Rides[] rides) => RideRepository.AddRides(userID, rides);
+
+        public InvoiceSummary GetInvoiceSummary(string userID) => this.CalculateFare(RideRepository.GetRides(userID));
     }
 }
