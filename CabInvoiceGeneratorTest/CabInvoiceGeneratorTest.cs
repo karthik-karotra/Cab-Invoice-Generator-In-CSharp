@@ -24,26 +24,24 @@ namespace CabInvoiceGeneratorTest
         }
 
         /// <summary>
-        /// Test Method for calculating fare when fare is greater than minimum fare.
+        /// Test Method for calculating fare for normal ride when fare is greater than minimum fare.
         /// </summary>
         [Test]
-        public void GivenDistanceAndTime_WhenTotalFareGreaterThanMinimumFare_ShouldReturnFare()
+        public void GivenDistanceAndTimeForNormalRide_WhenTotalFareGreaterThanMinimumFare_ShouldReturnFare()
         {
-            double distance = 10.0;
-            double time = 10;
-            double totalFare = this.cabInvoiceGenerator.CalculateFare(distance, time);
+            double totalFare = this.cabInvoiceGenerator.CalculateFare(RideType.Type.NORMAL, 10, 10);
             Assert.AreEqual(110, totalFare);
         }
 
         /// <summary>
-        /// Test Method for calculating fare when fare is less than minimum fare.
+        /// Test Method for calculating fare for normal ride when fare is less than minimum fare.
         /// </summary>
         [Test]
-        public void GivenDistanceAndTime_WhenTotalFareIsLessThanMinimumFare_ShouldReturnMinimumFare()
+        public void GivenDistanceAndTimeForNormalRide_WhenTotalFareIsLessThanMinimumFare_ShouldReturnMinimumFare()
         {
             double distance = 0.1;
             double time = 1;
-            double totalFare = this.cabInvoiceGenerator.CalculateFare(distance, time);
+            double totalFare = this.cabInvoiceGenerator.CalculateFare(RideType.Type.NORMAL, distance, time);
             Assert.AreEqual(5.0d, totalFare);
         }
 
@@ -53,8 +51,8 @@ namespace CabInvoiceGeneratorTest
         [Test]
         public void GivenDistanceAndTimeForMultipleRides_WhenProper_ShouldReturnAggregateFare()
         {
-            Rides[] ride = { new Rides(4.0, 5.0), new Rides(3.0, 5.0) };
-            InvoiceSummary invoiceSummary = this.cabInvoiceGenerator.CalculateFare(ride);
+            Rides[] ride = { new Rides(RideType.Type.NORMAL, 4.0, 5.0), new Rides(RideType.Type.NORMAL, 3.0, 5.0) };
+            InvoiceSummary invoiceSummary = this.cabInvoiceGenerator.CalculateFare(RideType.Type.NORMAL, ride);
             Assert.AreEqual(40.0, invoiceSummary.AverageFarePerRide);
         }
 
@@ -65,8 +63,8 @@ namespace CabInvoiceGeneratorTest
         public void GivenDistanceAndTimeForMultipleRides_WhenProper_ShouldReturnInvoiceSummary()
         {
             InvoiceSummary invoiceSummary = new InvoiceSummary(2, 605);
-            Rides[] rides = { new Rides(30, 30), new Rides(25, 25) };
-            InvoiceSummary invoiceSummaryOne = this.cabInvoiceGenerator.CalculateFare(rides);
+            Rides[] rides = { new Rides(RideType.Type.NORMAL, 30, 30), new Rides(RideType.Type.NORMAL, 25, 25) };
+            InvoiceSummary invoiceSummaryOne = this.cabInvoiceGenerator.CalculateFare(RideType.Type.NORMAL, rides);
             Assert.AreEqual(invoiceSummary, invoiceSummaryOne);
         }
 
@@ -77,11 +75,31 @@ namespace CabInvoiceGeneratorTest
         public void GivenDistanceAndTimeForMultipleRides_WhenUserFound_ShouldReturnInvoiceSummary()
         {
             string userId = "karthik@gmail.com";
-            Rides[] rides = { new Rides(3, 5), new Rides(4, 5) };
+            Rides[] rides = { new Rides(RideType.Type.NORMAL, 3, 5), new Rides(RideType.Type.NORMAL, 4, 5) };
             this.cabInvoiceGenerator.MapRidesToUser(userId, rides);
-            InvoiceSummary invoiceSummary = this.cabInvoiceGenerator.GetInvoiceSummary(userId);
+            InvoiceSummary invoiceSummary = this.cabInvoiceGenerator.GetInvoiceSummary(RideType.Type.NORMAL, userId);
             InvoiceSummary invoiceSummaryOne = new InvoiceSummary(2, 80);
             Assert.AreEqual(invoiceSummary, invoiceSummaryOne);
+        }
+
+        /// <summary>
+        /// Test Method for calculating fare for premium ride when fare is greater than minimum fare.
+        /// </summary>
+        [Test]
+        public void GivenDistanceAndTimeForPremiumRide_WhenTotalFareGreaterThanMinimumFare_ShouldReturnFare()
+        {
+            double totalFare = this.cabInvoiceGenerator.CalculateFare(RideType.Type.PREMIUM, 10, 10);
+            Assert.AreEqual(170, totalFare);
+        }
+
+        /// <summary>
+        /// Test Method for calculating fare for premium ride when fare is less than minimum fare.
+        /// </summary>
+        [Test]
+        public void GivenDistanceAndTimeForPremiumRide_WhenTotalFareIsLessThanMinimumFare_ShouldReturnMinimumFare()
+        {
+            double totalFare = this.cabInvoiceGenerator.CalculateFare(RideType.Type.PREMIUM, 1, 1);
+            Assert.AreEqual(20.0d, totalFare);
         }
     }
 }

@@ -10,16 +10,19 @@ namespace CabInvoiceGenerator
     {
         public double RideDistance;
         public double RideTime;
+        public RideType.Type Type;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Rides"/> class.
         /// </summary>
         /// <param name="rideDistance">Ride Distance Of A Ride.</param>
         /// <param name="rideTime">Ride Time Of A Ride.</param>
-        public Rides(double rideDistance, double rideTime)
+        /// <param name="type">Type Of Ride.</param>
+        public Rides(RideType.Type type, double rideDistance, double rideTime)
         {
             this.RideDistance = rideDistance;
             this.RideTime = rideTime;
+            this.Type = type;
         }
     }
 }
