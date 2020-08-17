@@ -46,5 +46,16 @@ namespace CabInvoiceGeneratorTest
             double totalFare = this.cabInvoiceGenerator.CalculateFare(distance, time);
             Assert.AreEqual(5.0d, totalFare);
         }
+
+        /// <summary>
+        /// Test Method To Calculate Aggregate Fare Of Multiple Rides.
+        /// </summary>
+        [Test]
+        public void GivenDistanceAndTimeForMultipleRides_WhenProper_ShouldReturnAggregateFare()
+        {
+            Rides[] ride = { new Rides(4.0, 5.0), new Rides(3.0, 5.0) };
+            double aggregateFare = this.cabInvoiceGenerator.GetMultipleRideFare(ride);
+            Assert.AreEqual(40.0, aggregateFare);
+        }
     }
 }

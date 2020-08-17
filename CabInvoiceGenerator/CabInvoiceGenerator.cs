@@ -13,18 +13,33 @@ namespace CabInvoiceGenerator
         private static readonly double CostPerKilometer = 10.0;
         private static readonly double CostPerMinute = 1.0;
         private static readonly double MinimumFare = 5.0;
-        private double totalFare = 0.0;
 
         /// <summary>
-        /// Method for calculating fare of a ride.
+        /// Method For Calculating Fare Of A Ride.
         /// </summary>
-        /// <param name="distance">Distance of ride.</param>
-        /// <param name="time">Time Taken for ride.</param>
-        /// <returns>Fare for a ride.</returns>
+        /// <param name="distance">Distance Of Ride.</param>
+        /// <param name="time">Time Taken For Ride.</param>
+        /// <returns>Fare For A Ride.</returns>
         public double CalculateFare(double distance, double time)
         {
-            this.totalFare = (distance * CostPerKilometer) + (time * CostPerMinute);
-            return Math.Max(this.totalFare, MinimumFare);
+            double totalFare = (distance * CostPerKilometer) + (time * CostPerMinute);
+            return Math.Max(totalFare, MinimumFare);
+        }
+
+        /// <summary>
+        ///  Method to Calculate Aggregate Fare Of Multiple Rides.
+        /// </summary>
+        /// <param name="rides">Array Of Ride Object Class.</param>
+        /// <returns>Aggregate Of Total Fare.</returns>
+        public double GetMultipleRideFare(Rides[] rides)
+        {
+            double totalRidesFare = 0.0;
+            foreach (Rides ride in rides)
+            {
+                totalRidesFare += this.CalculateFare(ride.RideDistance, ride.RideTime);
+            }
+
+            return totalRidesFare / rides.Length;
         }
     }
 }
