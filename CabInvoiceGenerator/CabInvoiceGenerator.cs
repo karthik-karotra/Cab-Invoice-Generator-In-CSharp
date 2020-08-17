@@ -31,7 +31,7 @@ namespace CabInvoiceGenerator
         /// </summary>
         /// <param name="rides">Array Of Ride Object Class.</param>
         /// <returns>Aggregate Of Total Fare.</returns>
-        public double GetMultipleRideFare(Rides[] rides)
+        public InvoiceSummary CalculateFare(Rides[] rides)
         {
             double totalRidesFare = 0.0;
             foreach (Rides ride in rides)
@@ -39,7 +39,7 @@ namespace CabInvoiceGenerator
                 totalRidesFare += this.CalculateFare(ride.RideDistance, ride.RideTime);
             }
 
-            return totalRidesFare / rides.Length;
+            return new InvoiceSummary(rides.Length, totalRidesFare);
         }
     }
 }

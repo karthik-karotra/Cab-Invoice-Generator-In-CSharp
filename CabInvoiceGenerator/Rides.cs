@@ -3,23 +3,12 @@
 // </copyright>
 namespace CabInvoiceGenerator
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
     /// <summary>
     /// Rides Class For Storing Information Of Rides.
     /// </summary>
     public class Rides
     {
-        /// <summary>
-        /// Variable For Storing Ride Distance Of A Particular Ride.
-        /// </summary>
         public double RideDistance;
-
-        /// <summary>
-        /// Variable For Storing Ride Time Of A Particular Ride.
-        /// </summary>
         public double RideTime;
 
         /// <summary>
