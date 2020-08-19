@@ -4,6 +4,7 @@
 namespace CabInvoiceGenerator
 {
     using System;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// Cab Invoicer Generator Service Class.
@@ -54,7 +55,15 @@ namespace CabInvoiceGenerator
             minimumFare = this.rideType.MinimumFare;
         }
 
-        public void MapRidesToUser(string userID, Rides[] rides) => RideRepository.AddRides(userID, rides);
+        public void MapRidesToUser(string userID, Rides[] rides)
+        {
+            if (!Regex.IsMatch(userID, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$", RegexOptions.IgnoreCase))
+            {
+                throw new CabInvoiceException("UserId Format Is Invalid.");
+            }
+
+            RideRepository.AddRides(userID, rides);
+        }
 
         public InvoiceSummary GetInvoiceSummary(RideType.Type type, string userID)
             => this.CalculateFare(type, RideRepository.GetRides(userID));
