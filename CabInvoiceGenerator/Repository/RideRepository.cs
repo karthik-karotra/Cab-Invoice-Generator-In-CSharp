@@ -10,7 +10,7 @@ namespace CabInvoiceGenerator
     /// </summary>
     public class RideRepository
     {
-        private static Dictionary<string, List<Rides>> userRideList = new Dictionary<string, List<Rides>>();
+        private static readonly Dictionary<string, List<Rides>> UserRideList = new Dictionary<string, List<Rides>>();
 
         /// <summary>
         /// Static Method For Adding Ride Details By User Id.
@@ -19,11 +19,17 @@ namespace CabInvoiceGenerator
         /// <param name="ride">Array Of Rides.</param>
         public static void AddRides(string userID, Rides[] ride)
         {
-            bool checkList = userRideList.ContainsKey(userID);
-
-            if (checkList == false)
+            bool isUserPresent = UserRideList.ContainsKey(userID);
+            if (isUserPresent)
             {
-                userRideList.Add(userID, new List<Rides>(ride));
+                List<Rides> lists = UserRideList[userID];
+                lists.AddRange(ride);
+                UserRideList[userID] = lists;
+            }
+
+            if (!isUserPresent)
+            {
+                UserRideList.Add(userID, new List<Rides>(ride));
             }
         }
 
@@ -34,7 +40,7 @@ namespace CabInvoiceGenerator
         /// <returns>Cab Rides Of User.</returns>
         public static Rides[] GetRides(string userId)
         {
-            return userRideList[userId].ToArray();
+            return UserRideList[userId].ToArray();
         }
     }
 }

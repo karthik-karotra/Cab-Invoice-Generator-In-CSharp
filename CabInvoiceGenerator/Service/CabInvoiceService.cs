@@ -1,14 +1,15 @@
-﻿// <copyright file="CabInvoiceGenerator.cs" company="BridgeLabz Solution">
+﻿// <copyright file="CabInvoiceService.cs" company="BridgeLabz Solution">
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 namespace CabInvoiceGenerator
 {
     using System;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// Cab Invoicer Generator Service Class.
     /// </summary>
-    public class CabInvoiceGenerator
+    public class CabInvoiceService
     {
         private static double costPerKilometer;
         private static double costPerMinute;
@@ -54,7 +55,15 @@ namespace CabInvoiceGenerator
             minimumFare = this.rideType.MinimumFare;
         }
 
-        public void MapRidesToUser(string userID, Rides[] rides) => RideRepository.AddRides(userID, rides);
+        public void MapRidesToUser(string userID, Rides[] rides)
+        {
+            if (!Regex.IsMatch(userID, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,})+)$", RegexOptions.IgnoreCase))
+            {
+                throw new CabInvoiceException("UserId Format Is Invalid.", CabInvoiceException.CabInvoiceExceptionType.INVALID_USERID);
+            }
+
+            RideRepository.AddRides(userID, rides);
+        }
 
         public InvoiceSummary GetInvoiceSummary(RideType.Type type, string userID)
             => this.CalculateFare(type, RideRepository.GetRides(userID));
